@@ -11,8 +11,9 @@ int playerTurn, numberOfPlayers, maxNumberOfPenguinsPerPlayer;
 char phase[10];
 int playerPoints[MAXPLAYERS] = {0};
 char **map;
+int mapRows = 1;
+int mapColumns = 1;
 
-char *substring (char *string, int start, int end);
 void readZeroRow(char *rowString);
 int isPenguinCharacter(char c);
 
@@ -27,8 +28,6 @@ void readMap(const char *nameOfFile) {
     }
     if (file) {
         int c, i, k = -1;
-        mapRows = 1;
-        mapColumns = 1;
         char s[100];
         
         for (i=0; i<4; i++){
@@ -106,44 +105,7 @@ int isPenguinCharacter(char c){
 };
 
 void readZeroRow(char *rowString){
-    playerTurn = (int)rowString[0]-'0';
-    
-    int score[MAXPLAYERS+2];
-    int length = (int)strlen(rowString);
-    int scoreIndex = 0;
-    int i;
-    
-    for (i=1; i<length; i++) {
-        if (rowString[i] == ' ' || rowString[i] == '\n'){
-            score[scoreIndex] = i;
-            scoreIndex++;
-        }
-    }
-    
-    for(i=0; i<MAXPLAYERS; i++){
-        playerPoints[i] = atoi(substring(rowString, score[i], score[i+1]));
-    };
-}
-
-char *substring (char *string, int start, int end){
-    char *pointer;
-    int length = end-start;
-    int c;
-    pointer = malloc(length+1);
-    
-    if (pointer == NULL){
-        printf("Unable to allocate memory");
-        exit(1);
-    }
-    
-    for (c=0; c<length; c++){
-        *(pointer+c) = *(string+start);
-        string++;
-    }
-    
-    *(pointer+c) = '\0';
-    
-    return pointer;
+    sscanf(rowString, "%d %d %d %d %d %d %d", &playerTurn, &playerPoints[0], &playerPoints[1], &playerPoints[2], &playerPoints[3], &playerPoints[4], &playerPoints[5]);
 }
 
 void printMap(char **map) {
@@ -188,7 +150,9 @@ void outputMap(char *fileName) {
         printf("File does not exist. Creating File");
         f = fopen(fileName, "wb");
     }
+    
     fprintf(f, "%d ", ((playerTurn+1) % numberOfPlayers));
+    
     for (i=0; i<MAXPLAYERS; i++) {
         if (i == MAXPLAYERS-1){
             fprintf(f, "%d\n", playerPoints[i]);

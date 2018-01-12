@@ -74,10 +74,10 @@ int movement(string position, string destination, int playerID){
 
    }
    else printf("Wrong destination! \n");
-
+  }
 
   return 0;
-  }
+  
 }
 
 bool pathPossible(string position, string destination) {
@@ -154,6 +154,7 @@ bool pathCorrect(string position, string destination){
             }return true;
         }
     }
+    return false;
 }
 
 int getFishesFromCharacter(char character){

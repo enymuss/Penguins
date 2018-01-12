@@ -29,7 +29,7 @@ int placement(){
 }
 
 void placePenguin(int playerID, string position){
-    //TODO: check that penguins is not already placed in position
+    //TODO: REDO until penguin is placed
     int X = convertToInt(position[0], 'A');
     int Y = convertToInt(position[1], '0');
     int fishes = convertToInt(map[X][Y], '0');
