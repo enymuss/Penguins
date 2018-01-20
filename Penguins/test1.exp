@@ -1,0 +1,20 @@
+#!/usr/bin/expect
+
+set timeout 20
+
+spawn ./a.out output1.txt output1out.txt
+
+#fail -> ask for player 1 to enter location again, not skip to player 2
+#expect "Enter location: " { send "a1\r" }
+
+expect "Enter location: " { send "c0\r" }
+expect "Enter location: " { send "e0\r" }
+expect "Enter location: " { send "e1\r" }
+expect "Enter location: " { send "e4\r" }
+
+# get "It's not your penguin!" but move should be possible
+expect "From Location: "  { send "c0\r" }
+expect "To Destination: " { send "a1\r" }
+
+interact
+

@@ -12,7 +12,7 @@
 #include "map.h"
 
 int game_end(int game_type, int fishes_on_board, int turn_number, int possible_move, int numb_of_penguins_team, int x);
-int who_win(int point1, int point2, int point3, int point4, int point5, int point6);
+int who_win(int playerPoints[MAXPLAYERS]);
 
 
 #endif /* endGame_h */

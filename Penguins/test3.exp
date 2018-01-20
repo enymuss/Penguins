@@ -1,0 +1,42 @@
+#!/usr/bin/expect
+
+set timeout 20
+
+spawn ./a.out output3.txt output3out.txt
+
+#fail -> ask for player 1 to enter location again, not skip to player 2
+#expect "Enter location: " { send "a1\r" }
+
+expect "Enter location: " { send "a0\r" }
+expect "Enter location: " { send "b2\r" }
+expect "Enter location: " { send "c0\r" }
+expect "Enter location: " { send "b1\r" }
+
+#correct - connot move penguing, but wrong reason
+expect "From Location: "  { send "c0\r" }
+expect "To Destination: " { send "b0\r" }
+
+#fail - should be possible to move but says "It's not your penguin!"
+expect "From Location: "  { send "b2\r" }
+expect "To Destination: " { send "c1\r" }
+
+#fail - repeat same command for all pleayers but get "Not your penguin" for all players
+#Player 1
+expect "From Location: "  { send "c0\r" }
+expect "To Destination: " { send "c1\r" }
+#player 2
+expect "From Location: "  { send "c0\r" }
+expect "To Destination: " { send "c1\r" }
+
+#this sequence should eat all the fish, win game and output board
+#expect "Enter location: " { send "a0\r" }
+#expect "Enter location: " { send "b2\r" }
+#expect "Enter location: " { send "c0\r" }
+#expect "Enter location: " { send "b1\r" }
+#expect "From Location: "  { send "a0\r" }
+#expect "To Destination: " { send "a1\r" }
+#expect "From Location: "  { send "b2\r" }
+#expect "To Destination: " { send "c1\r" }
+
+
+interact

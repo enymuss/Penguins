@@ -24,5 +24,5 @@ extern int mapColumns;
 extern void readMap(const char *nameOfFile);
 extern void printMap(char **map);
 extern int penguinsOnBoard(char **map);
-extern void outputMap(char *fileName);
+extern void outputMap(const char *fileName);
 extern void printScores(void);

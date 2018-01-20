@@ -43,8 +43,7 @@ void readMap(const char *nameOfFile) {
                         maxNumberOfPenguinsPerPlayer = (int)s[0]-'0';
                         break;
                     case 3:
-                        if (strcmp(s, "placement\n") == 0){ strcpy(phase, "placement"); }
-                        
+                        if (strstr(s, "placement") != NULL) {strcpy(phase, "placement");}
                         else { strcpy(phase, "movement");}
                         break;
                 }
@@ -53,9 +52,12 @@ void readMap(const char *nameOfFile) {
         int penguinsOnBoard = 0;
         while ((c = getc(file)) != EOF){
             k++;
+            if (c == '\r'){
+                c = getc(file); // skip \r
+            }
             if (c == '\n'){
                 if(mapRows == 1){
-                    mapColumns = k + 1;
+                    mapColumns = k+1;
                 }
                 mapRows++;
                 map = (char **) realloc(map, (sizeof(char *) * mapRows)); // realloc next row;
@@ -143,7 +145,7 @@ void printMapToFile(FILE *f) {
     }
 };
 
-void outputMap(char *fileName) {
+void outputMap(const char *fileName) {
     int i;
     FILE *f = fopen(fileName, "w");
     if (f == NULL){
@@ -153,8 +155,8 @@ void outputMap(char *fileName) {
     
     fprintf(f, "%d ", ((playerTurn+1) % numberOfPlayers));
     
-    for (i=0; i<MAXPLAYERS; i++) {
-        if (i == MAXPLAYERS-1){
+    for (i=0; i<numberOfPlayers; i++) {
+        if (i == numberOfPlayers-1){
             fprintf(f, "%d\n", playerPoints[i]);
         }
         else {
