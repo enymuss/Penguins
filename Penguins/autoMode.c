@@ -50,7 +50,7 @@ int autoMovement()
     
     
     while (count != 1) {
-        playerID = (playerTurn%numberOfPlayers);
+        playerID = ((playerTurn+count)%numberOfPlayers);
         
         //Choosing random starting point of each player
         int i,j,k=0;

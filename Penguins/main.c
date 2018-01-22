@@ -14,7 +14,7 @@ int main(int argc, const char * argv[]) {
     if (phase[0] == 'p') { // placement
         //placement();
         autoPlacement();
-    } else {
+    } else{
         //initMovement();
         autoMovement();
         printf("Player %d wins with %d points.\n", who_win(playerPoints)+1, playerPoints[who_win(playerPoints)]);
