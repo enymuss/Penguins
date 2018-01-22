@@ -16,8 +16,8 @@ int mapColumns = 1;
 
 void readZeroRow(char *rowString);
 int isPenguinCharacter(char c);
-
-//TODO: Adjust what to do based on read input
+int penguinsOnBoard(char **map);
+bool isPhaseMovement(char **map);
 
 void readMap(const char *nameOfFile) {
     
@@ -55,6 +55,7 @@ void readMap(const char *nameOfFile) {
             if (c == '\r'){
                 c = getc(file); // skip \r
             }
+
             if (c == '\n'){
                 if(mapRows == 1){
                     mapColumns = k+1;
@@ -69,8 +70,7 @@ void readMap(const char *nameOfFile) {
             if (currentRow == 0 && mapColumns == 1 && k == 0) {
                 map = (char **) malloc(sizeof(char *) * mapRows); // malloc first row;
                 map[currentRow] = (char *)malloc(sizeof(char) * (k+1)); //malloc first value;
-            }
-            else if (currentRow == 0) {
+            } else if (currentRow == 0) {
                 map[currentRow] = (char *)realloc(map[currentRow], (sizeof(char) * k+1)); //realloc kth value;
                 mapColumns = k+1;
                 
@@ -79,7 +79,6 @@ void readMap(const char *nameOfFile) {
             }
             
             if (currentRow % 2 == 1 && k == 0) {
-                
                 map[currentRow][k] = ' ';
                 k++;
             }
@@ -87,9 +86,12 @@ void readMap(const char *nameOfFile) {
             
             if (isPenguinCharacter(c)){ penguinsOnBoard++; };
         }
-        
-        if (penguinsOnBoard == (maxNumberOfPenguinsPerPlayer*numberOfPlayers)) {
+        if (strstr(phase, "placement") == NULL && isPhaseMovement(map)) {
             strcpy(phase, "movement");
+        }
+        
+        for (i = 0; i<mapRows; i+=2) {
+            map[i][mapColumns-1] = ' ';
         }
         fclose(file);
     }
@@ -139,11 +141,21 @@ void printMapToFile(FILE *f) {
     for (i=0; i<mapRows; i++){
         for (j=0; j<mapColumns; j++){
             if (i % 2 == 1 && j == 0){ j++; };
+            if (i % 2 == 0 && j == mapColumns-1){break;};
             fprintf(f, "%c", map[i][j]);
         }
-        fprintf(f, "\n");
+        if (i<mapRows-1){
+            fprintf(f, "\n");
+        }
     }
 };
+
+bool isPhaseMovement(char **map){
+    if (penguinsOnBoard(map) == (maxNumberOfPenguinsPerPlayer*numberOfPlayers)) {
+        return true;
+    }
+    return false;
+}
 
 void outputMap(const char *fileName) {
     int i;
@@ -165,6 +177,9 @@ void outputMap(const char *fileName) {
     }
     fprintf(f, "%d\n", numberOfPlayers);
     fprintf(f, "%d\n", maxNumberOfPenguinsPerPlayer);
+    if (isPhaseMovement(map)) {
+        strcpy(phase, "movement");
+    }
     fprintf(f, "%s\n", phase);
     
     printMapToFile(f);
@@ -177,9 +192,8 @@ int penguinsOnBoard(char **map){
     int penguins = 0;
     for (i=0; i<mapRows; i++){
         for (j=0; j<mapColumns; j++){
-            int number = convertToInt(map[i][j], '0');
-            if (0 < number && number <= 9) {
-                penguins += convertToInt(map[i][j], '0');
+            if (isPenguinCharacter(map[i][j])) {
+                penguins++;
             }
         }
     }

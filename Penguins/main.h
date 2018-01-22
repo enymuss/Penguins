@@ -2,7 +2,7 @@
 //  main.h
 //  Penguins
 //
-// 
+//
 //
 
 #ifndef main_h
@@ -18,6 +18,7 @@
 #include "movement.h"
 #include "map.h"
 #include "endGame.h"
+#include "autoMode.h"
 
 
 #endif /* main_h */
